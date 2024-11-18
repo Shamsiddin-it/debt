@@ -89,7 +89,7 @@
         <h2>Create New Debt</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Form fields are rendered here -->
+            {{ form.as_p }} 
             <button type="submit">Create Debt</button>
         </form>
         <a href="{% url 'debt_list' %}">Back to Debt List</a>

@@ -98,15 +98,10 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-# views.py
-
 def send_sms_view(request, pk):
     debt = Debt.objects.get(id=pk)
-    # Define recipient and message content
-    to_phone_number = '+992907708429'  # Recipient's phone number (replace with a real number)
+    to_phone_number = '+992907708429'  
     message = f"The {debt.customer_name}, have to pay owe {debt.amount} for {debt.description}."
-
-    # Call the function to send SMS
     if send_sms(to_phone_number, message):
         return HttpResponse("SMS sent successfully!")
     else:

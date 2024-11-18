@@ -1,10 +1,6 @@
 from django.db import models
-# from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 
-# class CustomUser(AbstractUser):
-
-#     pass
 
 class Debt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
@@ -20,7 +16,6 @@ class Debt(models.Model):
         return self.customer_name    
 
     def payback(self, amount_paid):
-        """Method to reduce the debt amount after a partial or full payment."""
         if self.is_active and amount_paid > 0:
             self.amount -= amount_paid
             self.save()  
@@ -37,7 +32,6 @@ class ReturnDebt(models.Model):
     date = models.DateField(auto_now=True)
 
     def payback(self):
-        """Record the payment and update the debt balance."""
         if self.debt.payback(self.amount) is not None:
             return True  
         return False
