@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Debt List{% endblock %}
+
+{% block content %}
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .debt-list-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .debt-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .debt-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+        .debt-item:hover {
+            background-color: #f1f3f5;
+        }
+
+        .debt-item a {
+            color: #007bff;
+            font-size: 18px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .debt-item a:hover {
+            color: #0056b3;
+        }
+
+        .debt-info {
+            font-size: 16px;
+            color: #333;
+            font-weight: normal;
+        }
+
+        .debt-info .amount {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .debt-info .status {
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .status.active {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status.paid {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        /* Optional: Adjust the link/button style for the 'Create Debt' or other actions */
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .actions a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="debt-list-container">
+        <h2>All Debts</h2>
+        <ul class="debt-list">
+            {% for debt in debts %}
+                {% if user.is_superuser %}
+                    <li class="debt-item">
+                        <div class="debt-info">
+                            <a href="{% url 'debt_detail' debt.pk %}">{{ debt.customer_name }}</a> - 
+                            <span class="amount">${{ debt.amount }}</span>
+                            {% if debt.is_active %}
+                                <span class="status active">Active</span>
+                            {% else %}
+                                <span class="status paid">Paid</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% else %}
+                    {% if debt.user == request.user %}
+                        <li class="debt-item">
+                            <div class="debt-info">
+                                <a href="{% url 'debt_detail' debt.pk %}">{{ debt.customer_name }}</a> - 
+                                <span class="amount">${{ debt.amount }}</span>
+                                {% if debt.is_active %}
+                                    <span class="status active">Active</span>
+                                {% else %}
+                                    <span class="status paid">Paid</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <h3>Total Debt: ${{ total_debt|default:0.00 }}</h3>
+        <h3>Debtors: {{ debtors|default:None }}</h3>
+        <div class="actions">
+            <a href="{% url 'create_debt' %}">Create New Debt</a>
+            <a href="{% url 'actives' %}">Not paid debts</a>
+            <a href="{% url 'paids' %}">Paid debts</a>
+        </div>
+    </div>
+{% endblock %}

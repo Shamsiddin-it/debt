@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ debt.customer_name }}'s Debt{% endblock %}
+
+{% block content %}
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .debt-detail-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .debt-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .debt-info {
+            margin-bottom: 20px;
+        }
+
+        .debt-info p {
+            font-size: 18px;
+            margin: 8px 0;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .status.active {
+            color: #28a745;  /* Green */
+        }
+
+        .status.paid {
+            color: #6c757d;  /* Gray */
+        }
+
+        .admin-info, .user-info {
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .payment-title {
+            font-size: 22px;
+            margin-top: 40px;
+            text-align: center;
+            color: #495057;
+        }
+
+        .payment-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .payment-item {
+            background-color: #f8f9fa;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-amount {
+            font-weight: bold;
+            color: #28a745;  /* Green */
+        }
+
+        .payment-date {
+            color: #6c757d;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .actions .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .actions .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .actions .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .actions .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .actions .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .actions .btn-warning {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .actions .btn-warning:hover {
+            background-color: #e0a800;
+        }
+    </style>
+
+    <div class="debt-detail-container">
+        <h2 class="debt-title">Debt Details for {{ debt.customer_name }}</h2>
+
+        <div class="debt-info">
+            <p><strong>Amount:</strong> ${{ debt.amount }}</p>
+            <p><strong>Description:</strong> {{ debt.description }}</p>
+            <p><strong>Status:</strong> {% if debt.is_active %}<span class="status active">Active</span>{% else %}<span class="status paid">Paid</span>{% endif %}</p>
+        </div>
+
+        {% if request.user.is_superuser %}
+            <div class="admin-info">
+                <p><strong>Who opened:</strong> {{ debt.user }}</p>
+            </div>
+        {% else %}
+            {% if debt.user == request.user %}
+                <div class="user-info">
+                    <p><strong>Who opened:</strong> You</p>
+                </div>
+            {% else %}
+                <div class="user-info">
+                    <p><strong>Who opened:</strong> Only admin can see</p>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <h3 class="payment-title">Payments</h3>
+        <ul class="payment-list">
+            {% for payment in payments %}
+                <li class="payment-item">
+                    <span class="payment-amount">${{ payment.amount }}</span> on <span class="payment-date">{{ payment.date }}</span> by <span>{{payment.debt.user}}</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="actions">
+            {% if debt.amount > 0 %}
+            <a href="{% url 'record_payment' debt.pk %}" class="btn btn-primary">Record Payment</a>
+            {% endif %}
+            <a href="{% url 'debt_list' %}" class="btn btn-secondary">Back to Debt List</a>
+            <a href="{% url 'send_sms' debt.pk %}" class="btn btn-warning">Send message to admin</a>
+        </div>
+    </div>
+{% endblock %}
