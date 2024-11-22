@@ -151,3 +151,4 @@ CSRF_TRUSTED_ORIGINS = [
     "https://debt-1.onrender.com",
     "http://localhost:3000",  # if you're testing locally as well
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
