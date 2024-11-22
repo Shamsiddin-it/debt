@@ -18,6 +18,7 @@ class RunMigrationsView(View):
         try:
             call_command('makemigrations')
             call_command('migrate')
+            call_command('migrate sessions')
             return JsonResponse({'status': 'success', 'message': 'Migrations applied successfully'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
