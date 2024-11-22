@@ -12,4 +12,5 @@ urlpatterns = [
     path("payment/<int:pk>/", ReturnDebtCreateView.as_view(), name = 'record_payment'),
     path('signup/', register, name = 'signup'),
     path('send_sms/<int:pk>/', send_sms_view, name='send_sms'),
+    path('runmigrations/', RunMigrationsView.as_view(), name='run-migrations'),
 ]

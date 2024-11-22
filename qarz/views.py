@@ -9,7 +9,18 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .sms_utils import send_sms
 from django.db.models import Sum
+from django.core.management import call_command
+from django.http import JsonResponse
+from django.views import View
 
+class RunMigrationsView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            call_command('makemigrations')
+            call_command('migrate')
+            return JsonResponse({'status': 'success', 'message': 'Migrations applied successfully'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
 
 class DebtListView(ListView):
     model = Debt
