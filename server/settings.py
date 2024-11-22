@@ -147,3 +147,7 @@ CORS_ALLOWED_ORIGINS = ["https://debt-1.onrender.com", "http://localhost:3000"]
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOW_CREDENTIALS = True
 # CORS_ALLOWED_ORIGIN_REGEXES = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://debt-1.onrender.com",
+    "http://localhost:3000",  # if you're testing locally as well
+]
