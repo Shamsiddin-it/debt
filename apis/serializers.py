@@ -8,7 +8,7 @@ class ReturnDebtSerializer(serializers.ModelSerializer):
         fields = ['id', 'amount', 'date']
 
 class DebtSerializer(serializers.ModelSerializer):
-    payments = ReturnDebtSerializer(many=True, read_only=True)  # Nested payments
+    payments = ReturnDebtSerializer(many=True, read_only=True) 
 
     class Meta:
         model = Debt

@@ -37,6 +37,7 @@ class DebtDetailAPIView(generics.RetrieveAPIView):
     queryset = Debt.objects.all()
     serializer_class = DebtSerializer
     lookup_field = 'pk'  
+
 class DebtCreateAPIView(generics.CreateAPIView):
     queryset = Debt.objects.all()
     serializer_class = DebtSerializer

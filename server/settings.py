@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$xdl*5fpmq7=t*u-#&ii&p#kb!-)fmemtl888^h*g_dv(l=+)3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd party
     'rest_framework',
+    'corsheaders',
     # local
     'bootstrap5',
     'qarz.apps.QarzConfig',
+    'apis.apps.ApisConfig',
     # 'telegrambot.apps.TelegrambotConfig',
 ]
 
@@ -53,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -138,3 +142,8 @@ LOGOUT_REDIRECT_URL = "home"
 NEXMO_API_KEY = '0305ff9d'  
 NEXMO_API_SECRET = 'kdyVhqPG9Rqc6jdW'  
 NEXMO_VIRTUAL_NUMBER = '+992907708429' 
+
+CORS_ALLOWED_ORIGINS = ["https://debt-1.onrender.com", "http://localhost:3000"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGIN_REGEXES = True
